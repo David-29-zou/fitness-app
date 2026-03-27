@@ -28,9 +28,29 @@ export default function Home() {
   const [tab, setTab]                     = useState<Tab>("log");
   const [editingSession, setEditingSession] = useState<Session | null>(null);
 
+  const STORAGE_KEY = "fitlog_sessions";
+
+  function saveLocally(updated: Session[]) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    } catch {
+      // storage quota exceeded — silently ignore
+    }
+    setSessions(updated);
+  }
+
   useEffect(() => {
     async function load() {
-      if (!isSupabaseConfigured()) { setLoading(false); return; }
+      if (!isSupabaseConfigured()) {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) setSessions(JSON.parse(raw) as Session[]);
+        } catch {
+          // corrupted data — start fresh
+        }
+        setLoading(false);
+        return;
+      }
       const { data, error } = await getSupabase()
         .from("sessions")
         .select("*, movements(*)")
@@ -51,11 +71,10 @@ export default function Home() {
     const isUpdate = editingSession !== null;
 
     if (!isSupabaseConfigured()) {
-      setSessions((prev) =>
-        isUpdate
-          ? prev.map((s) => (s.id === savedSession.id ? savedSession : s))
-          : [savedSession, ...prev]
-      );
+      const updated = isUpdate
+        ? sessions.map((s) => (s.id === savedSession.id ? savedSession : s))
+        : [savedSession, ...sessions];
+      saveLocally(updated);
       setEditingSession(null);
       setTab("history");
       return;
