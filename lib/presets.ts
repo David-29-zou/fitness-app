@@ -1,0 +1,47 @@
+import type { Topic } from "./types";
+
+export const PRESETS: Record<Topic, string[]> = {
+  chest: [
+    "Bench Press",
+    "Incline Bench Press",
+    "Decline Bench Press",
+    "Dumbbell Press",
+    "Cable Fly",
+    "Dumbbell Fly",
+    "Chest Dips",
+    "Push-up",
+    "Pec Deck",
+  ],
+  back: [
+    "Pull-up",
+    "Deadlift",
+    "Barbell Row",
+    "Seated Cable Row",
+    "Lat Pulldown",
+    "T-Bar Row",
+    "Dumbbell Row",
+    "Face Pull",
+    "Hyperextension",
+  ],
+  shoulders: [
+    "Overhead Press",
+    "Dumbbell Lateral Raise",
+    "Front Raise",
+    "Arnold Press",
+    "Rear Delt Fly",
+    "Upright Row",
+    "Shrugs",
+    "Machine Shoulder Press",
+  ],
+  legs: [
+    "Squat",
+    "Romanian Deadlift",
+    "Leg Press",
+    "Lunges",
+    "Leg Curl",
+    "Leg Extension",
+    "Calf Raise",
+    "Hip Thrust",
+    "Bulgarian Split Squat",
+  ],
+};
